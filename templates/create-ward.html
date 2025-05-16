@@ -1,0 +1,34 @@
+ <form action="" method="post">
+ {% csrf_token %}
+
+{{ form.name.label_tag }}
+{{ form.name }}
+{% if form.errors.name %}
+{{ form.errors.name.0 }}
+{% endif %}
+
+{{ form.date_of_birth.label_tag }}
+{{ form.date_of_birth }}
+{% if form.errors.date_of_birth %}
+{{ form.errors.date_of_birth.0 }}
+{% endif %}
+
+{{ form.parent_id.label_tag }}
+{{ form.parent_id }}
+{% if form.errors.parent_id %}
+{{ form.errors.parent_id.0 }}
+{% endif %}
+
+{{ form.class_name.label_tag }}
+{{ form.class_name }}
+{% if form.errors.class_name %}
+{{ form.errors.class_name.0 }}
+{% endif %}
+
+<h3>Allergy Information</h3>
+{% for form in formset %}
+{{ form.as_p }}
+{% endfor %}
+
+<button type="submit">Add Ward</button>
+</form>

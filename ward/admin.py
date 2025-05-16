@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Ward,Classes,Allergies
 
-# Register your models here.
+admin.site.register(Ward)
+admin.site.register(Classes)
+admin.site.register(Allergies)

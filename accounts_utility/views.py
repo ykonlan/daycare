@@ -16,7 +16,7 @@ class login_page_render(View):
             user = authenticate(request=request,email=form.cleaned_data.get("email"),password=form.cleaned_data.get("password"))
             if user:
                 login(request,user)
-                return redirect("dashboard")
+                return redirect(request.POST.get("next") or request.GET.get("next") or "dashboard")
             else:
                 messages.error(request,"Invalid email or password") 
         return render(request,"login.html",{"form":form})

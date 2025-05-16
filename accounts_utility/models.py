@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin,AbstractBaseUser,BaseUserManager
 from django.utils import timezone
+from django.conf import settings
+from django.core.exceptions import ValidationError
 
 class CustomUserManager(BaseUserManager):
     def create_user(self,user_phone,email,name,password=None,**extra_fields):
@@ -36,7 +38,9 @@ class CustomUserModel(PermissionsMixin,AbstractBaseUser):
     USERNAME_FIELD = 'email'
 
     def __str__(self):
-        return f"{self.name} ({self.user_phone})"
+        return f"{self.name}"
+    
+
     
 
     
