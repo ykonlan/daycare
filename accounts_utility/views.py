@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import View
 from .forms import LoginForm
-from django.contrib.auth import login,authenticate
+from django.contrib.auth import login,authenticate,logout
 from django.contrib import messages
 
 
@@ -24,5 +24,11 @@ class login_page_render(View):
 class dashboard_render(View):
     def get(self,request):
         return render(request,"dashboard.html")
+    
+class logout_view(View):
+    def post(self,request):
+        logout(request)
+        return redirect("login")
+
         
         
