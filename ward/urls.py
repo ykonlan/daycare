@@ -4,4 +4,5 @@ from . import views
 urlpatterns = [
     path("add/",views.WardView.as_view(),name="add-ward"),
     path("view/<int:ward_id>",views.WardView.as_view(),name="view-ward-details"),
+    path("view/",views.WardView.as_view(),name="view-wards"),
 ]

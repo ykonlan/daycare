@@ -12,8 +12,12 @@ class login_page_render(View):
     
     def post(self,request):
         form = LoginForm(request.POST)
+        print("Is form valid?", form.is_valid())
+        print("Cleaned email:", form.cleaned_data.get("email"))
+        print("Cleaned password:", form.cleaned_data.get("password"))
         if form.is_valid():
-            user = authenticate(request=request,email=form.cleaned_data.get("email"),password=form.cleaned_data.get("password"))
+            user = authenticate(request=request,username=form.cleaned_data.get("email"),password=form.cleaned_data.get("password"))
+            print(user)
             if user:
                 login(request,user)
                 return redirect(request.POST.get("next") or request.GET.get("next") or "dashboard")
