@@ -1,0 +1,11 @@
+<form action="{% url 'add-ward' %}" method="post">
+{% csrf_token %}
+{{ form.as_p}}
+
+{{allergy_form.management_form}}
+{% for formset in allergy_form %}
+{{formset}}
+{% endfor %}
+
+<button type="submit">Add Ward</button>
+</form>

@@ -3,10 +3,11 @@ from django.views import View
 from .models import Ward
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import WardForm,AllergyFormSet
 
 
 
-class WardView(LoginRequiredMixin,View):
+class GetWardView(LoginRequiredMixin,View):
     login_url = "/login/"
     redirect_field_name = "next"
     def get(self,request,ward_id=None):
@@ -38,6 +39,27 @@ class WardView(LoginRequiredMixin,View):
                 return render(request,"my-wards.html",{"wards":wards})
             else:
                 return redirect("dashboard")
+            
+class AddWardView(LoginRequiredMixin,View):
+    def get(self,request):
+        form = WardForm()
+        allergies = AllergyFormSet()
+        return render(request,"add-ward.html",{"form":form,"allergy_form":allergies})
+    
+    def post(self,request):
+        form = WardForm(request.POST)
+        if form.is_valid():
+            ward = form.save()
+            allergies = AllergyFormSet(request.POST,instance=ward)
+            if allergies.is_valid():
+                allergies.save()
+            else:
+                return render(request,"add-ward.html",{"form":form,"allergy_form":allergies})
+        else:
+            allergies = AllergyFormSet(request.POST)
+            return render(request,"add-ward.html",{"form":form,"allergy_form":allergies})
+        return redirect("add-ward")
+
             
 
 

@@ -7,6 +7,10 @@ class AllergyForm(forms.ModelForm):
     class Meta:
         model = Allergies
         exclude = ["ward_id"]
+    def __init__(self, *args,**kwargs):
+        super().__init__(*args,**kwargs)
+        for field in self.fields.values():
+            field.required = False
 
 class WardForm(forms.ModelForm):
     class Meta:
