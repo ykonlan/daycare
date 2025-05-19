@@ -7,6 +7,7 @@ from .forms import WardForm,AllergyFormSet
 
 
 
+
 class GetWardView(LoginRequiredMixin,View):
     login_url = "/login/"
     redirect_field_name = "next"
@@ -42,11 +43,17 @@ class GetWardView(LoginRequiredMixin,View):
             
 class AddWardView(LoginRequiredMixin,View):
     def get(self,request):
+        user = request.user
+        if not user.is_superuser:
+            return redirect("dashboard")
         form = WardForm()
         allergies = AllergyFormSet()
         return render(request,"add-ward.html",{"form":form,"allergy_form":allergies})
     
     def post(self,request):
+        user = request.user
+        if not user.is_superuser:
+            return redirect("dashboard")
         form = WardForm(request.POST)
         if form.is_valid():
             ward = form.save()
@@ -59,7 +66,29 @@ class AddWardView(LoginRequiredMixin,View):
             allergies = AllergyFormSet(request.POST)
             return render(request,"add-ward.html",{"form":form,"allergy_form":allergies})
         return redirect("add-ward")
-
+    
+class PatchWardView(LoginRequiredMixin,View):
+    def get(self,request,ward_id):
+        user = request.user 
+        if not user.is_superuser:
+            return redirect("dashboard")
+        ward = get_object_or_404(Ward,id=ward_id)
+        form = WardForm(instance=ward)
+        allergies = AllergyFormSet(instance=ward)
+        return render(request,"edit-ward.html",{"form":form,"allergies":allergies,"ward":ward})
+    
+    def post(self,request,ward_id):
+        user = request.user
+        if not user.is_superuser:
+            return redirect("dashboard")
+        ward = get_object_or_404(Ward,id=ward_id)
+        form = WardForm(request.POST,instance=ward)
+        allergies = AllergyFormSet(request.POST,instance=ward)
+        if form.is_valid() and allergies.is_valid():
+            form.save()
+            allergies.save()
+            return redirect("view-ward-details",ward_id=ward.id)
+        return render(request,"edit-ward.html",{"form":form,"allergies":allergies,"ward":ward})
             
 
 

@@ -1,0 +1,9 @@
+<form action="{% url 'edit-wards' ward.id%}" method="post">
+    {% csrf_token %}
+
+{{form.as_p}}
+{{allergies.management_form}}
+{{allergies.as_p}}
+
+<button class="submit">Edit Ward</button>
+</form>
