@@ -6,11 +6,19 @@
     <title>My Wards</title>
 </head>
 <body>
- <ul>
+    <ul>
+    {% if request.user.is_superuser %}
     {% for ward in wards %}
-    {{ ward.name}}
+    <p><a href="{% url 'edit-wards' ward.id %}">{{ward.name}}</a></p>
     {% endfor %}
 
- </ul>   
+    {% else %}
+
+    {% for ward in wards %}
+    <p>{{ward.name}}</p>
+    {% endfor %}
+    {% endif %}
+</ul>
+    
 </body>
 </html>

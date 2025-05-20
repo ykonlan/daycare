@@ -89,6 +89,17 @@ class PatchWardView(LoginRequiredMixin,View):
             allergies.save()
             return redirect("view-ward-details",ward_id=ward.id)
         return render(request,"edit-ward.html",{"form":form,"allergies":allergies,"ward":ward})
+    
+
+class DeleteWardView(LoginRequiredMixin,View):
+    def post(self,request,ward_id):
+        user = request.user
+        if not user.is_superuser:
+            return redirect("dashboard")
+        ward = get_object_or_404(Ward,id=ward_id)
+        ward.delete()
+        return redirect("view-wards")
+        
             
 
 

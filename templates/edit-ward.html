@@ -7,3 +7,7 @@
 
 <button class="submit">Edit Ward</button>
 </form>
+<form action="{% url 'delete-ward' ward.id%}" method="post">
+    {% csrf_token %}
+    <button type="submit" style="color: red;">Delete</button>
+</form>
