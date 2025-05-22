@@ -42,6 +42,8 @@ class GetWardView(LoginRequiredMixin,View):
                 return redirect("dashboard")
             
 class AddWardView(LoginRequiredMixin,View):
+    login_url = "/login/"
+    redirect_field_name = "next"
     def get(self,request):
         user = request.user
         if not user.is_superuser:
@@ -68,6 +70,8 @@ class AddWardView(LoginRequiredMixin,View):
         return redirect("add-ward")
     
 class PatchWardView(LoginRequiredMixin,View):
+    login_url = "/login/"
+    redirect_field_name = "next"
     def get(self,request,ward_id):
         user = request.user 
         if not user.is_superuser:
@@ -92,6 +96,8 @@ class PatchWardView(LoginRequiredMixin,View):
     
 
 class DeleteWardView(LoginRequiredMixin,View):
+    login_url = "/login/"
+    redirect_field_name = "next"
     def post(self,request,ward_id):
         user = request.user
         if not user.is_superuser:

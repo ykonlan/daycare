@@ -1,0 +1,3 @@
+{% for parent in parents %}
+<p><a href="{% url 'edit-parents' parent.id %}">{{parent.name}}-----{{parent.user_phone}}</a></p>
+{% endfor %}

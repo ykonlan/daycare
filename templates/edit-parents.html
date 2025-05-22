@@ -1,0 +1,10 @@
+<form action="{% url 'edit-parents' parent_id %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Edit Parent</button>
+</form>
+
+<form action="{% url 'delete-parent' parent_id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Delete Parent</button>
+</form>

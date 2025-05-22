@@ -2,6 +2,10 @@ from django import forms
 from .models import Ward,Allergies
 from django.forms import BaseInlineFormSet,inlineformset_factory
 from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 
 class AllergyForm(forms.ModelForm):
@@ -18,6 +22,11 @@ class WardForm(forms.ModelForm):
         model = Ward
         fields = ["name","date_of_birth","parent_id","class_name"]
         widgets = {"date_of_birth": forms.DateInput(attrs={"type":"date"})}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["parent_id"].queryset = User.objects.filter(groups__name="parents")
+
 
 class ReqAllergyFormSet(BaseInlineFormSet):
     def clean(self):

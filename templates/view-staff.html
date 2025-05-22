@@ -1,0 +1,3 @@
+{% for profile in staff_profiles %}
+<p><a href="{% url 'edit-staff' profile.staff_id.id %}" style="text-decoration: none;">{{profile.staff_id.name}}-----{{profile.class_name}}-----{{profile.staff_id.user_phone}}</a></p>
+{% endfor %}

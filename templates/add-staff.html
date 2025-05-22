@@ -1,0 +1,5 @@
+<form action="{% url 'add-staff' %}" method="post">
+    {% csrf_token %}
+{{form.as_p}}
+<button type="submit">Add Staff</button>
+</form>

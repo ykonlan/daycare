@@ -1,0 +1,40 @@
+<form action="{% url 'edit-staff' staff_id %}" method="post">
+    {% csrf_token %}
+<p>
+    {{form.name.label_tag}}<br>
+    {{form.name}}<br>
+    {% if form.name.errors %}
+    {{form.name.errors.0}}
+    {% endif %}
+</p>
+
+<p>
+    {{form.user_phone.label_tag}}<br>
+    {{form.user_phone}}<br>
+    {% if form.user_phone.errors %}
+    {{form.user_phone.errors.0}}
+    {% endif %}
+</p>
+
+<p>
+    {{form.email.label_tag}}<br>
+    {{form.email}}<br>
+    {% if form.email.errors %}
+    {{form.email.errors.0}}
+    {% endif %}
+</p>
+
+<p>
+    {{form.class_name.label_tag}}<br>
+    {{form.class_name}}<br>
+    {% if form.class_name.errors %}
+    {{form.class_name.errors.0}}
+    {% endif %}
+</p>
+<button class="submit">Edit Staff</button>
+
+</form>
+<form action="{% url 'delete-staff' staff_id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Delete Staff</button>
+</form>

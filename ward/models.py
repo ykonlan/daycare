@@ -18,6 +18,7 @@ class Ward(models.Model):
     parent_id = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name="wards")
     class_name = models.ForeignKey("classes",on_delete=models.SET_NULL,null=True)
 
+
     def save(self,*args,**kwargs):
         is_new = self._state.adding
         if not is_new:

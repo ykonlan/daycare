@@ -21,6 +21,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser",True)
         extra_fields.setdefault("is_active",True)
         return self.create_user(user_phone,email,name,password,**extra_fields)
+    
 
 
 class CustomUserModel(PermissionsMixin,AbstractBaseUser):
