@@ -1,0 +1,29 @@
+<form action="{% url 'fill-forms' %}" method="post">
+    {% csrf_token %}
+    {% if messages %}
+    {% for msg in messages %}
+    {{msg}}
+    {% endfor %}
+    {% endif %}
+    {{form.as_p}}
+
+<p>
+{{ naps.management_form }}
+{% for set in naps %}
+{{set}}
+{% endfor %}
+</p>
+<p>
+{{ meds.management_form }}
+{% for set in meds %}
+{{set}}
+{% endfor %}
+</p>
+<p>
+{{ meals.management_form }}
+{% for set in meals %}
+{{set}}
+{% endfor %}
+</p>
+<button type="submit">Submit Form</button>
+</form>

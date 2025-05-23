@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts_utility',
     'ward',
-    'staff'
+    'staff',
+    'parents',
+    'dailydeets'
 ]
 
 MIDDLEWARE = [

@@ -43,6 +43,9 @@ class Ward(models.Model):
        ward_class.class_population -= 1
        ward_class.save()
 
+    def __str__(self):
+        return self.name
+
 
 class Allergies(models.Model):
     allergy_name = models.CharField(max_length=50)
