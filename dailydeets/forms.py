@@ -35,11 +35,31 @@ MealFormset = formset_factory(form=MealForm,extra=2,can_delete=False)
 class NapForm(forms.Form):
     nap_start = forms.TimeField(widget=forms.TimeInput(attrs={"type":"time"}),required=False)
     nap_end = forms.TimeField(widget=forms.TimeInput(attrs={"type":"time"}),required=False)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        nap_start = cleaned_data.get("nap_start")
+        nap_end = cleaned_data.get("nap_end")
+        fields = [nap_start,nap_end]
+        filled = [bool(f) for f in fields]
+        if sum(filled) < len(fields):
+            raise forms.ValidationError("Please fill all fields or leave all blank")
+        return cleaned_data
 NapFormset = formset_factory(form=NapForm,extra=2,can_delete=False)
 
 class MedForm(forms.Form):
     med_name = forms.CharField(max_length=50,required=False)
     med_time = forms.TimeField(widget=forms.TimeInput(attrs={"type":"time"}),required=False)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        med_name = cleaned_data.get("med_name")
+        med_time = cleaned_data.get("med_time")
+        fields = [med_name,med_time]
+        filled = [bool(f) for f in fields]
+        if sum(filled) < len(fields):
+            raise forms.ValidationError("Please fill all fields or leave all blank")
+        return cleaned_data
 MedFormset = formset_factory(form=MedForm,extra=2,can_delete=False)
 
 
@@ -52,13 +72,18 @@ class DailyDeetForm(forms.ModelForm):
     class Meta:
         model = DailyDeets
         fields = [
-            "ward_id",
             "day_highlight",
             "extra_needs",
             "special_behavior",
             "general_mood",
         ]
 
-    def __init__(self, *args, class_name,**kwargs):
+
+class WardSelectForm(forms.ModelForm):
+    class Meta:
+        model = DailyDeets
+        fields = ["ward_id"]
+    def __init__(self,*args,class_name=None,**kwargs):
         super().__init__(*args,**kwargs)
         self.fields["ward_id"].queryset = Ward.objects.filter(class_name=class_name)
+    
