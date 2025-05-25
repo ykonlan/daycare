@@ -86,4 +86,21 @@ class WardSelectForm(forms.ModelForm):
     def __init__(self,*args,class_name=None,**kwargs):
         super().__init__(*args,**kwargs)
         self.fields["ward_id"].queryset = Ward.objects.filter(class_name=class_name)
+
+
+class GetDailyDeetsForm(forms.Form):
+    ward_id = forms.ModelChoiceField(queryset=Ward.objects.all())
+    date = forms.DateField(widget=forms.DateInput(attrs={"type":"date"}))
+
+    def __init__(self, *args, class_name=None, parent_id=None, **kwargs):
+        super().__init__(*args,**kwargs)
+        if class_name:
+            self.fields["ward_id"].queryset = Ward.objects.filter(class_name=class_name)
+        elif parent_id:
+            self.fields["ward_id"].queryset = Ward.objects.filter(parent_id=parent_id)
+        else:
+            self.fields["ward_id"].queryset = Ward.objects.all()
+
+
+
     

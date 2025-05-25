@@ -3,7 +3,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.db import IntegrityError
-from .forms import DailyDeetForm,MealFormset,NapFormset,MedFormset,WardSelectForm
+from .forms import DailyDeetForm,MealFormset,NapFormset,MedFormset,WardSelectForm,GetDailyDeetsForm
 from django.shortcuts import get_object_or_404
 from staff.models import StaffProfile
 from ward.models import Ward
@@ -19,7 +19,6 @@ class FillDailyDeetForm(LoginRequiredMixin,View):
         if not user.groups.filter(name="staff").exists():
             return redirect("dashboard")
         class_name = StaffProfile.objects.get(staff_id=user.id).class_name
-        print(request.POST)
         form = DailyDeetForm(request.POST)
         meal_formset = MealFormset(request.POST,prefix="meals")
         nap_formset = NapFormset(request.POST,prefix="naps")
@@ -74,7 +73,8 @@ class FillDailyDeetForm(LoginRequiredMixin,View):
         
 class WardSelect(LoginRequiredMixin,View):
     def get(self,request):
-        print("In WardSelect view")
+        if not request.user.groups.filter(name="staff").exists():
+            return redirect("dashboard")
         class_name = StaffProfile.objects.get(staff_id=request.user.id).class_name
         ward_select = WardSelectForm(class_name=class_name)
         return render(request,"fill-daily-deets.html",{"ward_select":ward_select})
@@ -107,4 +107,49 @@ class WardSelect(LoginRequiredMixin,View):
             return render(request,"fill-daily-deets.html",{"ward_select":ward_select})
     
         
-          
+class GetDailyDeets(LoginRequiredMixin,View):
+    def get(self,request):
+        user = request.user
+        if user.is_superuser:
+            form = GetDailyDeetsForm()
+        elif user.groups.filter(name="staff").exists():
+            staff_class = StaffProfile.objects.get(id=user.id).class_name
+            form = GetDailyDeetsForm(class_name=staff_class)
+        elif user.groups.filter(name="parents").exists():
+            form = GetDailyDeetsForm(parent_id=user.id)
+        else:
+            raise PermissionDenied("You cannot visit this page")
+        return render(request,"get-daily-deets.html",{"form":form})
+    
+    def post(self,request):
+        user = request.user
+        if user.is_superuser:
+            form = GetDailyDeetsForm(request.POST)
+            if form.is_valid():
+                ward = form.cleaned_data.get("ward_id")
+                date_specified = form.cleaned_data.get("date") 
+            else:
+                return render(request,"get-daily-deets.html",{"form":form})
+        elif user.groups.filter(name="staff").exists():
+            staff_class = StaffProfile.objects.get(id=user.id).class_name
+            form = GetDailyDeetsForm(request.POST,class_name=staff_class)
+            if form.is_valid():
+                ward = form.cleaned_data.get("ward_id")
+                date_specified = form.cleaned_data.get("date")
+                if staff_class != ward.class_name:
+                    raise PermissionDenied("You are not entitled to this ward")
+            else:
+                return render(request,"get-daily-deets.html",{"form":form})
+        elif user.groups.filter(name="parents").exists():
+            form = GetDailyDeetsForm(request.POST,parent_id=user.id)
+            if form.is_valid():
+                ward = form.cleaned_data.get("ward_id")
+                date_specified = form.cleaned_data.get("date")
+                if user != ward.parent_id:
+                    raise PermissionDenied("You are not entitled to this ward")
+            else:
+                return render(request,"get-daily-deets.html",{"form":form})
+        else:
+            raise PermissionDenied("You cannot visit this page")
+        daily_deet = DailyDeets.objects.select_related("ward_id").filter(ward_id=ward,date=date_specified).first()
+        return render(request,"get-daily-deets.html",{"form":form,"daily_deet":daily_deet})

@@ -1,0 +1,16 @@
+<form action="{% url 'view-deets' %}" method="post">
+    {% csrf_token %}
+{{form.as_p}}
+<button type="submit">View Daily Report</button>
+</form>
+
+{% if daily_deet %}
+
+<h1>REPORT FOR {{daily_deet.ward_id.name}} ON {{daily_deet.date}}</h1>
+
+<h2>MEALS🍔</h2>
+{% for meal in daily_deet.meals %}
+<h3>MEAL:{{meal.meal}}</h3>
+{% endfor %}
+
+{% endif %}
