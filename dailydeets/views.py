@@ -26,6 +26,9 @@ class FillDailyDeetForm(LoginRequiredMixin,View):
         med_formset = MedFormset(request.POST,prefix="meds")
         today = timezone.now().date()
         ward = get_object_or_404(Ward,id=ward_id)
+        daily_deet_instance = DailyDeets.objects.filter(ward_id=ward,date=today).first()
+        if daily_deet_instance:
+            form = DailyDeetForm(request.POST,instance=daily_deet_instance)
         if form.is_valid() and meal_formset.is_valid() and nap_formset.is_valid() and med_formset.is_valid():
             ward_class = ward.class_name
             if ward_class != class_name:
