@@ -4,21 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Wards</title>
+    <style>
+  table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 8px;
+  }
+  
+</style>
 </head>
 <body>
-    <ul>
-    {% if request.user.is_superuser %}
-    {% for ward in wards %}
-    <p><a href="{% url 'edit-wards' ward.id %}">{{ward.name}}</a></p>
-    {% endfor %}
+<table border="1">
+<tr>
+    <th>WARD</th>
+    <th>CLASS</th>
+</tr>
+{% for ward in wards %}
+<tr>
+    <td><a href="{% url 'edit-wards' ward.id %}">{{ward.name}}</a></td>
+    <td>{{ward.class_name}}</td>
+</tr>
+{% endfor %}
 
-    {% else %}
-
-    {% for ward in wards %}
-    <p>{{ward.name}}</p>
-    {% endfor %}
-    {% endif %}
-</ul>
-    
+</table>
 </body>
 </html>

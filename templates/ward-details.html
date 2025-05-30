@@ -1,7 +1,22 @@
+<h2>WARD NAME : {{ward.name}}</h2>
+<h2>CLASS : {{ward.class_name}}</h2>
+<h2>PARENT NAME : {{ward.parent_id.name}}</h2>
+<h2>PARENT PHONE : {{ward.parent_id.user_phone}}</h2>
+{% if allergies %}
+<details>
+    <summary>
+        <h2>ALLERGIES</h2>
+    </summary>
+    <ul>
+    {% for allergy in allergies %}
+    <p><li><h4>ALLERGY</h4>:{{allergy.allergy_name}}<br>
+    <h4>REACTION</h4>:{{allergy.allergy_reaction}}<br>
+    <h4>SEVERITY</h4>:{{allergy.allergy_severity}}<br>
+    </li></p>
+    {% endfor %}
+    </ul>
 
-<ol>
-NAME - PARENT - CLASS
-
-<li>{{ward.name}} - {{ward.parent_id}} - {{ward.class_name}}</li>
-
-</ol>
+</details>
+{% endif %}
+<h2>DATE OF BIRTH:{{ward.date_of_birth}}</h2>
+<h2></h2>

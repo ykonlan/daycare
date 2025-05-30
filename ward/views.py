@@ -4,6 +4,8 @@ from .models import Ward
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import WardForm,AllergyFormSet
+from django.http import Http404
+from .models import Allergies
 
 
 
@@ -16,9 +18,12 @@ class GetWardView(LoginRequiredMixin,View):
         is_a_parent =user.groups.filter(name="parents").exists()
         is_a_staff =user.groups.filter(name="staff").exists()
         if ward_id:
-            ward = get_object_or_404(Ward,id=ward_id)
+            ward = Ward.objects.select_related("parent_id").filter(id=ward_id).first()
+            if not ward:
+                raise Http404("Ward not found!")
+            allergies = Allergies.objects.filter(ward_id=ward)
             if user.is_superuser:
-                return render(request,"ward-details.html",{"ward":ward})
+                return render(request,"ward-details.html",{"ward":ward,"allergies":allergies})
             elif is_a_parent:
                 if ward.parent_id_id != user.id:
                     return redirect("dashboard")
@@ -27,16 +32,16 @@ class GetWardView(LoginRequiredMixin,View):
                     return redirect("dashboard")
             else:
                 return redirect("dashboard")
-            return render(request,"ward-details.html",{"ward":ward})
+            return render(request,"ward-details.html",{"ward":ward,"allergies":allergies})
         else:
-            if is_a_parent:
+            if user.is_superuser:
+                wards = Ward.objects.all()
+                return render(request,"my-wards.html",{"wards":wards})
+            elif is_a_parent:
                 wards = Ward.objects.filter(parent_id=user.id)
                 return render(request,"my-wards.html",{"wards":wards})
             elif is_a_staff:
                 wards = Ward.objects.filter(class_name=user.staff_profile.class_name)
-                return render(request,"my-wards.html",{"wards":wards})
-            elif user.is_superuser:
-                wards = Ward.objects.all()
                 return render(request,"my-wards.html",{"wards":wards})
             else:
                 return redirect("dashboard")
@@ -91,7 +96,7 @@ class PatchWardView(LoginRequiredMixin,View):
         if form.is_valid() and allergies.is_valid():
             form.save()
             allergies.save()
-            return redirect("view-ward-details",ward_id=ward.id)
+            return redirect("edit-wards",ward_id=ward.id)
         return render(request,"edit-ward.html",{"form":form,"allergies":allergies,"ward":ward})
     
 
