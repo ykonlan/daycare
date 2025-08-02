@@ -10,11 +10,11 @@
 {% csrf_token %}
 <input type="hidden" name="next" value="{{request.GET.next}}">
 
-<p>{{form.email.label_tag}}<br>
+<form>{{form.email.label_tag}}<br>
 {{ form.email}}<br>
 {% if form.errors.email%}
 {{form.email.errors.0}}
-{% endif %}</p>
+{% endif %}</form>
 
 <p>{{form.password.label_tag}}<br>
 {{ form.password}}<br>
