@@ -1,20 +1,23 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="{% static 'style.css'%}">
 </head>
 <body>
+    
 <form action="/login/" method="post">
 {% csrf_token %}
 <input type="hidden" name="next" value="{{request.GET.next}}">
 
-<form>{{form.email.label_tag}}<br>
+<p>{{form.email.label_tag}}<br>
 {{ form.email}}<br>
 {% if form.errors.email%}
 {{form.email.errors.0}}
-{% endif %}</form>
+{% endif %}</p>
 
 <p>{{form.password.label_tag}}<br>
 {{ form.password}}<br>
