@@ -31,8 +31,10 @@ class AddStaffView(LoginRequiredMixin,View):
             email = form.cleaned_data.get("email")
             name = form.cleaned_data.get("name")
             class_name = form.cleaned_data.get("class_name")
+            password = form.cleaned_data.get("password")
             
             user = CustomUserModel(user_phone=user_phone,email=email,name=name)
+            user.set_password(password)
             group = Group.objects.get(name="staff")
             user.save()
             user.groups.add(group)

@@ -6,7 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import WardForm,AllergyFormSet
 from django.http import Http404
 from .models import Allergies
-
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 
@@ -34,17 +35,22 @@ class GetWardView(LoginRequiredMixin,View):
                 return redirect("dashboard")
             return render(request,"ward-details.html",{"ward":ward,"allergies":allergies})
         else:
+            
             if user.is_superuser:
-                wards = Ward.objects.all()
-                return render(request,"my-wards.html",{"wards":wards})
+                search_query = request.GET.get("search_query")
+                wards = Ward.objects.all().order_by("name")
+                if search_query:
+                    wards = wards.filter(
+                        Q(name__icontains=search_query) | Q(class_name__class_name__icontains=search_query)
+                    )
             elif is_a_parent:
-                wards = Ward.objects.filter(parent_id=user.id)
-                return render(request,"my-wards.html",{"wards":wards})
+                wards = Ward.objects.filter(parent_id=user.id).order_by("name")
             elif is_a_staff:
-                wards = Ward.objects.filter(class_name=user.staff_profile.class_name)
-                return render(request,"my-wards.html",{"wards":wards})
-            else:
-                return redirect("dashboard")
+                wards = Ward.objects.filter(class_name=user.staff_profile.class_name).order_by("name")
+            page = request.GET.get("page")
+            paginator = Paginator(wards, 20)
+            the_page = paginator.get_page(page)
+            return render(request, "my-wards.html", {"wards": the_page})
             
 class AddWardView(LoginRequiredMixin,View):
     login_url = "/login/"

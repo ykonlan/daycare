@@ -5,15 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="{% static 'styles.css'%}">
+    <link rel="stylesheet" href="{% static 'base.css'%}">
+    <link rel="stylesheet" href="{% static 'login.css'%}">
 </head>
 <body>
-    
-    <div class="form-container">
-        <div class="form-header">
+    <h1 class="main-heading">Daycare Management</h1>
+    <div class="login-container">
+        <div class="login-card">
             <h2>Login</h2>
-        </div>
-        <div class="actual-form">
             <form action="/login/" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{request.GET.next}}">
@@ -37,9 +36,9 @@
                     {% endif %}
                 </p>
 
-                <button class="btn" type="submit">Login</button>
+                <button class="btn-login" type="submit">Login</button>
             </form>  
-        </div> 
-    </div> 
+        </div>
+    </div>
 </body>
 </html>

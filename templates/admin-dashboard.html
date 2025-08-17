@@ -1,0 +1,40 @@
+{% extends "dashboard.html" %}
+
+{% block sidebar %}
+    <ul>
+        <a href="/dashboard/"><li class="active sidebar-tab" id="Overview" onclick="setActive(this)">Overview</li></a>
+        <a href="/wards/view/"><li id="Children" class="sidebar-tab" onclick="setActive(this)">Children</li></a>
+        <li id="Staff" class="sidebar-tab" onclick="setActive(this)">Staff</li>
+        <li id="Parents" class="sidebar-tab" onclick="setActive(this)">Parents</li>
+        <li id="Daily-Reports" class="sidebar-tab" onclick="setActive(this)">Daily Reports</li>
+        <li id="Classes" class="sidebar-tab" onclick="setActive(this)">Classes</li>
+        <li id="My-Profile" class="sidebar-tab" onclick="setActive(this)">My Profile</li>
+    </ul>
+{% endblock %}
+
+
+{% block content %}
+    <div class="dashboard-stats" id="Overview-content">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fa-solid fa-children"></i>    
+            </div>
+            <h3>Wards Enrolled</h3>
+            <p>{{ward_pop}}</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fa-solid fa-person-chalkboard"></i>
+            </div>
+            <h3>Staff</h3>
+            <p>{{staff_pop}}</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fa-solid fa-building"></i>
+            </div>
+            <h3>Classes</h3>
+            <p>{{class_count}}</p>
+        </div>
+    </div>
+{% endblock %}

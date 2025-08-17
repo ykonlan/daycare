@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+.main-heading {
+  text-align: center;
+  font-size: 2.8rem;
+  color: #6a4c93;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #6a4c93, antiquewhite);
+;
+}
+
+.login-card {
+  background: linear-gradient(135deg, #6a4c93, antiquewhite);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 8px 8px 16px var(--shadow-dark),
+              -8px -8px 16px var(--shadow-light);
+  width: 100%;
+  max-width: 350px;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 2rem;
+  color: var(--primary);
+}
+
+.login-card input {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.2rem;
+  border: none;
+  outline: none;
+  border-radius: 50px;
+  background: var(--bg);
+  box-shadow: inset 4px 4px 8px var(--shadow-dark),
+              inset -4px -4px 8px var(--shadow-light);
+  font-size: 1rem;
+}
+
+.login-card .btn-login {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 50px;
+  background: var(--primary);
+  color: antiquewhite;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 4px 4px 8px var(--shadow-dark),
+              -4px -4px 8px var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+.login-card .btn-login:hover {
+  box-shadow: 0 0 12px var(--primary);
+  transform: translateY(-2px);
+}
+
+.login-card .forgot {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--primary);
+  text-decoration: none;
+}

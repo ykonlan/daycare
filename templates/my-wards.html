@@ -1,31 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Wards</title>
-    <style>
-  table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-    padding: 8px;
-  }
-  
-</style>
-</head>
-<body>
-<table border="1">
-<tr>
-    <th>WARD</th>
-    <th>CLASS</th>
-</tr>
-{% for ward in wards %}
-<tr>
-    <td><a href="{% url 'edit-wards' ward.id %}">{{ward.name}}</a></td>
-    <td>{{ward.class_name}}</td>
-</tr>
-{% endfor %}
+{% extends "admin-dashboard.html" %}
 
+
+{% block content %}
+
+<div class="search-bar-container" style="justify-content: space-between;">
+  <div class="search-bar-container">
+      <form method="get" action="/wards/view/">
+          <input type="text" name="search_query" placeholder="Search ward name or class" value="{{ request.GET.search_query }}">
+          <button type="submit">Search</button>
+      </form>
+  </div>
+
+  <a href="#" class="add-child-btn">
+        <i class="fa-solid fa-plus"></i>
+        Add Child
+  </a>
+</div>
+
+<table class="children-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Class</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ward in wards %}
+          <tr>
+              <td><a href="/wards/view/{{ward.id}}">{{ward.name}}</a></td>
+              <td>{{ward.class_name}}</td>
+          </tr>
+        {% endfor %}
+    </tbody>
 </table>
-</body>
-</html>
+
+<div class="pagination">
+    {% if wards.has_previous %}
+        <a href="?page={{ wards.previous_page_number }}&search_query={{ request.GET.search_query }}">« Prev</a>
+    {% else %}
+        <span class="disabled">« Prev</span>
+    {% endif %}
+
+    {% for page_num in wards.paginator.page_range %}
+        {% if page_num == wards.number %}
+            <span class="active">{{ page_num }}</span>
+        {% else %}
+            <a href="?page={{ page_num }}&search_query={{ request.GET.search_query }}">{{ page_num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if wards.has_next %}
+        <a href="?page={{ wards.next_page_number }}&search_query={{ request.GET.search_query }}">Next »</a>
+    {% else %}
+        <span class="disabled">Next »</span>
+    {% endif %}
+</div>
+
+
+{% endblock %}
+
+
+{% block title %}
+<title>All Wards</title>
+{% endblock %}
+
+{% block heading %}
+<h1>All Wards</h1>
+{% endblock %}
+
+{% block script %}
+  <script>
+    document.addEventListener("DOMContentLoaded",function(){
+      document.querySelectorAll('.sidebar-tab').forEach(tab => tab.classList.remove("active"));
+      document.getElementById("Children").classList.add("active");
+    }) ;
+  </script>
+{% endblock %}
