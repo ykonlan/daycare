@@ -7,6 +7,8 @@ from .models import StaffProfile
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 User = get_user_model()
 
@@ -83,22 +85,31 @@ class EditStaffView(LoginRequiredMixin,View):
             return render(request,"edit-staff.html",{"form":form,"staff_id":staff_id})
         
 class GetStaffView(LoginRequiredMixin,View):
-    login_url = "/login/"
+    login_url = ""
     redirect_field_name = "next"
     def get(self,request,staff_id=None):
         user = request.user
         if not user.is_superuser:
             return redirect("dashboard")
         if staff_id:
-            staff_profile = StaffProfile.objects.select_related("staff_id").get(staff_id=staff_id)
+            staff_profile = StaffProfile.objects.select_related("staff").get(staff_id=staff_id)
             return render(request,"view-staff-details.html",{"class_name":staff_profile.class_name,"staff":staff_profile.staff_id})
         else:
-            staff_profiles = StaffProfile.objects.select_related("staff_id").all()
-            return render(request,"view-staff.html",{"staff_profiles":staff_profiles})
+            staff_profiles = StaffProfile.objects.select_related("staff").all().order_by("staff__name")
+            search_query = request.GET.get("search_query")
+            if search_query:
+                staff_profiles = staff_profiles.filter(
+                    Q(staff__name__icontains=search_query) | Q(class_name__class_name__icontains=search_query)
+                )
+            print(staff_profiles[0].staff.name)
+            paginator = Paginator(staff_profiles, 20)
+            the_page = request.GET.get("page")
+            staff = paginator.get_page(the_page)
+            return render(request,"view-staff.html",{"staff":staff})
         
 
 class DeleteStaffView(LoginRequiredMixin,View):
-    login_url = "/login/"
+    login_url = ""
     redirect_field_name = "next"
     def post(self,request,staff_id):
         user = request.user

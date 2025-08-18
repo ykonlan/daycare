@@ -1,3 +1,81 @@
+{% extends "view-staff.html" %}
+
+{% block form %}
+
+<form method="get" action="/parents/view/">
+          <input type="text" name="search_query" placeholder="Search staff name or class" value="{{ request.GET.search_query }}">
+          <button type="submit">Search</button>
+</form>
+
+{% endblock %}
+
+{% block addbtn %}
+<a href="/parents/add/" class="add-child-btn">
+        <i class="fa-solid fa-plus"></i>
+        Add Parent
+  </a>
+{% endblock %}
+
+{% block tablebody %}
 {% for parent in parents %}
-<p><a href="{% url 'edit-parents' parent.id %}">{{parent.name}}-----{{parent.user_phone}}</a></p>
-{% endfor %}
+<tr>
+    <td><a href="/parents/view/{{parent.id}}">{{parent.name}}</a></td>
+    <td>{{parent.user_phone}}</td>
+    <td>{{parent.email}}</td>
+</tr>{% endfor %}
+{% endblock %}
+
+
+{% block pagination %}
+
+{% if parents.has_previous %}
+        <a href="?page={{ parents.previous_page_number }}&search_query={{ request.GET.search_query }}">« Prev</a>
+    {% else %}
+        <span class="disabled">« Prev</span>
+    {% endif %}
+
+    {% for page_num in parents.paginator.page_range %}
+        {% if page_num == parents.number %}
+            <span class="active">{{ page_num }}</span>
+        {% else %}
+            <a href="?page={{ page_num }}&search_query={{ request.GET.search_query }}">{{ page_num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if parents.has_next %}
+        <a href="?page={{ parents.next_page_number }}&search_query={{ request.GET.search_query }}">Next »</a>
+    {% else %}
+        <span class="disabled">Next »</span>
+{% endif %}
+    
+{% endblock %}
+
+{% block title %}
+<title>All Parents</title>
+{% endblock %}
+
+{% block heading %}
+<h1>All Parents</h1>
+{% endblock %}
+
+{% block script %}
+  <script>
+    document.addEventListener("DOMContentLoaded",function(){
+      document.querySelectorAll('.sidebar-tab').forEach(tab => tab.classList.remove("active"));
+      document.getElementById("Parents").classList.add("active");
+    }) ;
+  </script>
+{% endblock %}
+
+{% block tablehead %}
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            
+{% endblock %}
+
+
+
+
+
+

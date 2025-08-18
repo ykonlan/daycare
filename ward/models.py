@@ -9,6 +9,9 @@ class Classes(models.Model):
 
     def __str__(self):
         return self.class_name
+    
+    class Meta:
+        db_table = "classes"
 
 
 class Ward(models.Model):
@@ -35,6 +38,9 @@ class Ward(models.Model):
                 super().save()
                 self.class_name.class_population += 1
                 self.class_name.save()
+
+    class Meta:
+        db_table = "wards"
             
 
     def delete(self,*args,**kwargs):
@@ -53,4 +59,7 @@ class Allergies(models.Model):
     CHOICES = [("high","High"),("moderate","Moderate"),("low","Low")]
     allergy_severity = models.CharField(choices=CHOICES)
     ward_id = models.ForeignKey("ward",on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = "allergies"
 

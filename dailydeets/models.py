@@ -14,3 +14,4 @@ class DailyDeets(models.Model):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=["date","ward_id"],name="unique_ward_date")]
+        db_table = "daily_deets"

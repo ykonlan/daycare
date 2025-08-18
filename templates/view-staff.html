@@ -1,3 +1,70 @@
-{% for profile in staff_profiles %}
-<p><a href="{% url 'edit-staff' profile.staff_id.id %}" style="text-decoration: none;">{{profile.staff_id.name}}-----{{profile.class_name}}-----{{profile.staff_id.user_phone}}</a></p>
-{% endfor %}
+{% extends "my-wards.html" %}
+
+{% block form %}
+
+<form method="get" action="/staff/view/">
+          <input type="text" name="search_query" placeholder="Search staff name or class" value="{{ request.GET.search_query }}">
+          <button type="submit">Search</button>
+</form>
+
+{% endblock %}
+
+{% block addbtn %}
+<a href="/staff/add/" class="add-child-btn">
+        <i class="fa-solid fa-plus"></i>
+        Add Staff
+  </a>
+{% endblock %}
+
+
+{% block tablebody %}
+{% for profile in staff %}
+<tr>
+    <td><a href="/staff/view/{{profile.staff.id}}">{{profile.staff.name}}</a></td>
+    <td>{{profile.class_name.name}}</td>
+</tr>{% endfor %}
+{% endblock %}
+
+
+{% block pagination %}
+
+{% if staff.has_previous %}
+        <a href="?page={{ staff.previous_page_number }}&search_query={{ request.GET.search_query }}">« Prev</a>
+    {% else %}
+        <span class="disabled">« Prev</span>
+    {% endif %}
+
+    {% for page_num in staff.paginator.page_range %}
+        {% if page_num == staff.number %}
+            <span class="active">{{ page_num }}</span>
+        {% else %}
+            <a href="?page={{ page_num }}&search_query={{ request.GET.search_query }}">{{ page_num }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if staff.has_next %}
+        <a href="?page={{ staff.next_page_number }}&search_query={{ request.GET.search_query }}">Next »</a>
+    {% else %}
+        <span class="disabled">Next »</span>
+{% endif %}
+    
+{% endblock %}
+
+
+    {% block title %}
+<title>All Staff</title>
+{% endblock %}
+
+{% block heading %}
+<h1>All Staff</h1>
+{% endblock %}
+
+{% block script %}
+  <script>
+    document.addEventListener("DOMContentLoaded",function(){
+      document.querySelectorAll('.sidebar-tab').forEach(tab => tab.classList.remove("active"));
+      document.getElementById("Staff").classList.add("active");
+    }) ;
+  </script>
+{% endblock %}
+

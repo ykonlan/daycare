@@ -1,14 +1,15 @@
 {% extends "dashboard.html" %}
 
+
 {% block sidebar %}
     <ul>
         <a href="/dashboard/"><li class="active sidebar-tab" id="Overview" onclick="setActive(this)">Overview</li></a>
-        <a href="/wards/view/"><li id="Children" class="sidebar-tab" onclick="setActive(this)">Children</li></a>
-        <li id="Staff" class="sidebar-tab" onclick="setActive(this)">Staff</li>
-        <li id="Parents" class="sidebar-tab" onclick="setActive(this)">Parents</li>
-        <li id="Daily-Reports" class="sidebar-tab" onclick="setActive(this)">Daily Reports</li>
-        <li id="Classes" class="sidebar-tab" onclick="setActive(this)">Classes</li>
-        <li id="My-Profile" class="sidebar-tab" onclick="setActive(this)">My Profile</li>
+        <a href="/wards/view/"><li id="Children" class="sidebar-tab">Children</li></a>
+        <a href="/staff/view/"><li id="Staff" class="sidebar-tab" >Staff</li></a>
+        <a href="/parents/view/"><li id="Parents" class="sidebar-tab">Parents</li></a>
+        <li id="Daily-Reports" class="sidebar-tab">Daily Reports</li>
+        <a href="wards/classes/view/"><li id="Classes" class="sidebar-tab">Classes</li></a>
+        <li id="My-Profile" class="sidebar-tab">My Profile</li>
     </ul>
 {% endblock %}
 

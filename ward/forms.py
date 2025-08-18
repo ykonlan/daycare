@@ -1,5 +1,5 @@
 from django import forms
-from .models import Ward,Allergies
+from .models import Ward,Allergies,Classes
 from django.forms import BaseInlineFormSet,inlineformset_factory
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
@@ -43,7 +43,10 @@ class ReqAllergyFormSet(BaseInlineFormSet):
             
 AllergyFormSet = inlineformset_factory(Ward,Allergies,fields=["allergy_name","allergy_reaction","allergy_severity"],extra=2,formset=ReqAllergyFormSet,can_delete=False)
             
-
+class ClassForm(forms.ModelForm):
+    class Meta:
+        model = Classes
+        fields = ["class_name", "class_population"]
 
 
         

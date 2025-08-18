@@ -1,13 +1,14 @@
 from django.shortcuts import render,redirect
 from django.views import View
-from .models import Ward
+from .models import Ward, Classes
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import WardForm,AllergyFormSet
+from .forms import WardForm,AllergyFormSet, ClassForm
 from django.http import Http404
 from .models import Allergies
 from django.core.paginator import Paginator
 from django.db.models import Q
+
 
 
 
@@ -107,7 +108,7 @@ class PatchWardView(LoginRequiredMixin,View):
     
 
 class DeleteWardView(LoginRequiredMixin,View):
-    login_url = "/login/"
+    login_url = ""
     redirect_field_name = "next"
     def post(self,request,ward_id):
         user = request.user
@@ -116,6 +117,24 @@ class DeleteWardView(LoginRequiredMixin,View):
         ward = get_object_or_404(Ward,id=ward_id)
         ward.delete()
         return redirect("view-wards")
+    
+class GetClassesView(LoginRequiredMixin,View):
+    login_url = ""
+    redirect_field_name = "next"
+    def get(self,request):
+        classes = Classes.objects.all().order_by("class_name")
+        return render(request, "view-classes.html", {"classes": classes})
+
+    def post(self,request):
+        user = request.user
+        if not user.is_superuser:
+            return redirect("dashboard")
+        class_form = ClassForm(request.POST)
+        if class_form.is_valid:
+            class_form.save()
+            return redirect("view-classes")
+        return render(request, "view-wards", {"form": class_form})
+        
         
             
 

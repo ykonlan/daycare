@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.core.paginator import Paginator
 from django.shortcuts import render,redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -7,11 +7,12 @@ from .forms import ParentForm
 from accounts_utility.models import CustomUserModel
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 
 
 class AddParentView(LoginRequiredMixin,View):
-    login_url = "/login/"
+    login_url = ""
     redirect_field_name = "next"
     def get(self,request):
         user = request.user
@@ -41,7 +42,7 @@ class AddParentView(LoginRequiredMixin,View):
     
 
 class EditParentView(LoginRequiredMixin,View):
-     login_url = "/login/"
+     login_url = ""
      redirect_field_name = "next"
      def get(self,request,parent_id):
          user = request.user
@@ -72,18 +73,24 @@ class EditParentView(LoginRequiredMixin,View):
              return render(request,"edit-parents.html",{"form":form,"parent_id":parent_id})
         
 class GetParentView(LoginRequiredMixin,View):
-     login_url = "/login/"
+     login_url = ""
      redirect_field_name = "next"
-     def get(self,request,parents_id=None):
+     def get(self,request,parent_id=None):
          user = request.user
          if not user.is_superuser:
              return redirect("dashboard")
-         if parents_id:
-             parent = get_object_or_404(CustomUserModel,id=parents_id)
+         if parent_id:
+             parent = get_object_or_404(CustomUserModel,id=parent_id)
              return render(request,"view-parents-details.html",{"parent":parent})
          else:
-             parents = CustomUserModel.objects.all()
-             return render(request,"view-parents.html",{"parents":parents})
+             the_page = request.GET.get("page")
+             search_query = request.GET.get("search_query")
+             parents = CustomUserModel.objects.all().order_by("name")
+             paginator = Paginator(parents, 20)
+             if search_query:
+                 parents = parents.filter(name__icontains=search_query)
+             page = paginator.get_page(the_page)
+             return render(request,"view-parents.html",{"parents":page})
         
 
 class DeleteParentView(LoginRequiredMixin,View):

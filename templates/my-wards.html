@@ -5,36 +5,46 @@
 
 <div class="search-bar-container" style="justify-content: space-between;">
   <div class="search-bar-container">
+    {% block form %}
       <form method="get" action="/wards/view/">
           <input type="text" name="search_query" placeholder="Search ward name or class" value="{{ request.GET.search_query }}">
           <button type="submit">Search</button>
       </form>
+    {% endblock %}
   </div>
 
-  <a href="#" class="add-child-btn">
+  {% block addbtn %}
+  <a href="/wards/add/" class="add-child-btn">
         <i class="fa-solid fa-plus"></i>
         Add Child
   </a>
+  {% endblock %}
 </div>
 
 <table class="children-table">
     <thead>
         <tr>
+          {% block tablehead %}
             <th>Name</th>
             <th>Class</th>
+          {% endblock %}
         </tr>
     </thead>
     <tbody>
+        {% block tablebody %}
         {% for ward in wards %}
           <tr>
               <td><a href="/wards/view/{{ward.id}}">{{ward.name}}</a></td>
               <td>{{ward.class_name}}</td>
           </tr>
         {% endfor %}
+        {% endblock %}
     </tbody>
 </table>
 
+
 <div class="pagination">
+    {% block pagination %}
     {% if wards.has_previous %}
         <a href="?page={{ wards.previous_page_number }}&search_query={{ request.GET.search_query }}">« Prev</a>
     {% else %}
@@ -54,6 +64,7 @@
     {% else %}
         <span class="disabled">Next »</span>
     {% endif %}
+    {% endblock %}
 </div>
 
 

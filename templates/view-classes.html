@@ -1,0 +1,14 @@
+{% extends "admin-dashboard.html" %}
+
+{% block content %}
+
+<div class="dashboard-stats" id="Overview-content">
+    {% for clas in classes %}
+        <div class="stat-card">
+                <h1>{{clas.name}}</h1>    
+            <p>{{clas.population}}</p>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
