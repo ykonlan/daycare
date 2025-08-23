@@ -5,10 +5,27 @@
 <div class="dashboard-stats" id="Overview-content">
     {% for clas in classes %}
         <div class="stat-card">
-                <h1>{{clas.name}}</h1>    
-            <p>{{clas.population}}</p>
+                <h1>{{clas.class_name}}</h1>    
+            <p>{{clas.class_population}}</p>
         </div>
     {% endfor %}
 </div>
 
+{% endblock %}
+
+{% block title %}
+<title>All Classes</title>
+{% endblock %}
+
+{% block heading %}
+<h1 style="margin-left: 25px;">All Classes</h1>
+{% endblock %}
+
+{% block script %}
+  <script>
+    document.addEventListener("DOMContentLoaded",function(){
+      document.querySelectorAll('.sidebar-tab').forEach(tab => tab.classList.remove("active"));
+      document.getElementById("Classes").classList.add("active");
+    }) ;
+  </script>
 {% endblock %}

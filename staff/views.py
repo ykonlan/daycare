@@ -101,7 +101,6 @@ class GetStaffView(LoginRequiredMixin,View):
                 staff_profiles = staff_profiles.filter(
                     Q(staff__name__icontains=search_query) | Q(class_name__class_name__icontains=search_query)
                 )
-            print(staff_profiles[0].staff.name)
             paginator = Paginator(staff_profiles, 20)
             the_page = request.GET.get("page")
             staff = paginator.get_page(the_page)
