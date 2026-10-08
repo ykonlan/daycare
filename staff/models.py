@@ -7,7 +7,7 @@ class StaffProfile(models.Model):
     class_name = models.ForeignKey("ward.classes",on_delete=models.CASCADE)
 
     def save(self,*args,**kwargs):
-        if not self.staff_id.groups.filter(name="staff").exists():
+        if not self.staff.groups.filter(name="staff").exists():
             raise ValidationError("Only staff can have a staff profile")
         super().save(*args,**kwargs)
 
